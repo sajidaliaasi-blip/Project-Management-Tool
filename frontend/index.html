@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-tasks"></i>
+                <span>ProjectFlow</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#" class="active" data-page="dashboard">Dashboard</a>
+                <a href="#" data-page="projects">Projects</a>
+                <a href="#" data-page="tasks">Tasks</a>
+            </div>
+            <div class="nav-right">
+                <div class="notifications" id="notificationsBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge" id="notificationBadge">0</span>
+                </div>
+                <div class="user-menu" id="userMenu">
+                    <img src="https://via.placeholder.com/40" alt="User" id="userAvatar">
+                    <span id="userName">User</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Auth Container -->
+        <div id="authContainer" class="auth-container">
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="register">Register</button>
+                </div>
+                <div id="authForms">
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Login</button>
+                    </form>
+                    <!-- Register Form -->
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="registerName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="registerPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="appContent" style="display: none;">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-menu">
+                    <button class="sidebar-item active" data-view="dashboard">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="sidebar-item" data-view="projects">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Projects</span>
+                    </button>
+                    <button class="sidebar-item" data-view="board">
+                        <i class="fas fa-columns"></i>
+                        <span>Board</span>
+                    </button>
+                    <button class="sidebar-item" data-view="tasks">
+                        <i class="fas fa-tasks"></i>
+                        <span>My Tasks</span>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard View -->
+                <div id="dashboardView" class="view active">
+                    <div class="view-header">
+                        <h1>Dashboard</h1>
+                        <div class="view-actions">
+                            <button class="btn-secondary" id="createProjectBtn">
+                                <i class="fas fa-plus"></i> New Project
+                            </button>
+                        </div>
+                    </div>
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e8f5e9;">
+                                <i class="fas fa-project-diagram" style="color: #4caf50;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalProjects">0</h3>
+                                <p>Total Projects</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e3f2fd;">
+                                <i class="fas fa-tasks" style="color: #2196f3;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalTasks">0</h3>
+                                <p>Total Tasks</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #fff3e0;">
+                                <i class="fas fa-clock" style="color: #ff9800;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="inProgressTasks">0</h3>
+                                <p>In Progress</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #f3e5f5;">
+                                <i class="fas fa-check-circle" style="color: #9c27b0;"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedTasks">0</h3>
+                                <p>Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-projects">
+                        <h2>Recent Projects</h2>
+                        <div id="recentProjectsList" class="project-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Projects View -->
+                <div id="projectsView" class="view">
+                    <div class="view-header">
+                        <h1>Projects</h1>
+                        <div class="view-actions">
+                            <button class="btn-secondary" id="createProjectBtn2">
+                                <i class="fas fa-plus"></i> New Project
+                            </button>
+                        </div>
+                    </div>
+                    <div id="projectsList" class="project-grid"></div>
+                </div>
+
+                <!-- Board View -->
+                <div id="boardView" class="view">
+                    <div class="view-header">
+                        <h1>Board</h1>
+                        <div class="view-actions">
+                            <select id="projectSelector" class="project-select">
+                                <option value="">Select a project</option>
+                            </select>
+                            <button class="btn-secondary" id="addListBtn">
+                                <i class="fas fa-plus"></i> Add List
+                            </button>
+                        </div>
+                    </div>
+                    <div id="boardContainer" class="board-container">
+                        <div class="empty-state">
+                            <i class="fas fa-columns"></i>
+                            <h3>No Board Selected</h3>
+                            <p>Select a project to view its board</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks View -->
+                <div id="tasksView" class="view">
+                    <div class="view-header">
+                        <h1>My Tasks</h1>
+                        <div class="view-actions">
+                            <button class="btn-secondary" id="filterTasksBtn">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div id="myTasksList" class="task-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Project Modal -->
+    <div id="createProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Project</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="createProjectForm">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="projectName" placeholder="Enter project name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="projectDescription" placeholder="Enter project description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Team Members (comma separated emails)</label>
+                    <input type="text" id="projectMembers" placeholder="email1@example.com, email2@example.com">
+                </div>
+                <button type="submit" class="btn-primary">Create Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Task Modal -->
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Task</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="createTaskForm">
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" id="taskTitle" placeholder="Enter task title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDescription" placeholder="Enter task description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Assign to</label>
+                    <select id="taskAssignees" multiple>
+                        <option value="">Select team members</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Due Date</label>
+                    <input type="date" id="taskDueDate">
+                </div>
+                <div class="form-group">
+                    <label>Priority</label>
+                    <select id="taskPriority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <input type="hidden" id="taskListId">
+                <button type="submit" class="btn-primary">Create Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add List Modal -->
+    <div id="addListModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New List</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="addListForm">
+                <div class="form-group">
+                    <label>List Name</label>
+                    <input type="text" id="listName" placeholder="Enter list name" required>
+                </div>
+                <input type="hidden" id="listProjectId">
+                <button type="submit" class="btn-primary">Add List</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Task Detail Modal -->
+    <div id="taskDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="taskDetailTitle">Task Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="taskDetailContent">
+                <div class="task-detail-grid">
+                    <div class="task-detail-main">
+                        <div class="task-detail-description">
+                            <h4>Description</h4>
+                            <p id="taskDetailDesc">No description</p>
+                        </div>
+                        <div class="task-detail-comments">
+                            <h4>Comments</h4>
+                            <div id="taskComments" class="comment-list"></div>
+                            <div class="add-comment">
+                                <textarea id="commentInput" placeholder="Add a comment..." rows="2"></textarea>
+                                <button id="addCommentBtn" class="btn-primary btn-sm">Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-detail-sidebar">
+                        <div class="detail-item">
+                            <label>Status</label>
+                            <select id="taskDetailStatus">
+                                <option value="todo">To Do</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="review">Review</option>
+                                <option value="done">Done</option>
+                            </select>
+                        </div>
+                        <div class="detail-item">
+                            <label>Priority</label>
+                            <select id="taskDetailPriority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="detail-item">
+                            <label>Assignees</label>
+                            <div id="taskDetailAssignees"></div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Due Date</label>
+                            <input type="date" id="taskDetailDueDate">
+                        </div>
+                        <button id="deleteTaskBtn" class="btn-danger">Delete Task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Dropdown -->
+    <div id="notificationsDropdown" class="notifications-dropdown" style="display: none;">
+        <div class="notifications-header">
+            <h4>Notifications</h4>
+            <button id="clearNotifications">Clear All</button>
+        </div>
+        <div id="notificationsList" class="notifications-list"></div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
